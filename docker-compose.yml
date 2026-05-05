@@ -1,0 +1,21 @@
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: data_center_db
+    environment:
+      POSTGRES_USER: data_analyst_admin
+      POSTGRES_PASSWORD: local_password
+      POSTGRES_DB: data_center
+    ports:
+      - "7550:5432"
+    volumes:
+      - center_pg_data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U data_analyst_admin -d data_center"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  center_pg_data:
